@@ -5,7 +5,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-
+import org.json.JSONObject;
+import org.json.XML;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,26 +29,11 @@ public class ConvertController {
 		String xmlString = request.getParameter("xml2json")
 							.replaceAll("\n", "")
 							.replaceAll("    ", "");
-		XmlMapper xmlMapper = new XmlMapper();
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode node = null;
-		try {
-			node = xmlMapper.readTree(xmlString.getBytes());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		ObjectMapper jsonMapper = new ObjectMapper();
-		String json = null;
-		try {
-			json = jsonMapper.writeValueAsString(node);
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
-
-		return json;
+		JSONObject json = XML.toJSONObject(xmlString);
+		System.out.println(json);
+		
+		return json.toString();
 	}
 	
 	
@@ -72,7 +58,9 @@ public class ConvertController {
 		}
 		String xml = null;
 		try {
-			xml= xmlMapper.writeValueAsString(map);
+			xml= xmlMapper.writeValueAsString(map)
+					.replaceAll("<LinkedHashMap>", "")
+					.replaceAll("</LinkedHashMap>", "");
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

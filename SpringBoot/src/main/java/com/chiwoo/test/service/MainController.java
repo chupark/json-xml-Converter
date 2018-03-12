@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MainController {
 
 	@RequestMapping("/index")
-	public String index(Model model) {
-		model.addAttribute("name", "SpringBlog from Millky");
+	public String index() {
 		
 		return "index";
 	}
